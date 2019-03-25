@@ -7,16 +7,26 @@
 \alias{format_tests.default}
 \title{Formats hypothesis test results}
 \usage{
-format_tests(x)
+format_tests(x, ...)
 
-\method{format_tests}{htest}(x)
+\method{format_tests}{htest}(x, format_tests.htest = NULL, ...)
 
-\method{format_tests}{htest_with_effect_size}(x)
+\method{format_tests}{htest_with_effect_size}(x,
+  format_tests.htest_with_effect_size = NULL, ...)
 
-\method{format_tests}{default}(x)
+\method{format_tests}{default}(x, ...)
 }
 \arguments{
 \item{x}{An object.}
+
+\item{...}{Passed from and to other methods.}
+
+\item{format_tests.htest}{Either \code{NULL} or a function. Default is \code{NULL}.
+If a function, then it will replace \code{format_tests.htest}.
+The function must mimic \code{\link{format_tests}}: arguments are \code{x} and the ellipsis ... .
+Result is a data.frame with 1 rows and unique colnames.}
+
+\item{format_tests.htest_with_effect_size}{Analog to argument format_tests.htest}
 }
 \value{
 A non-empty data.frame with one row.

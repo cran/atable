@@ -16,9 +16,60 @@ atable(x, ...)
 }
 \arguments{
 \item{x}{An object. If \code{x} is a data.frame, it must have unique and syntactically valid colnames,
-see \code{\link[atable]{is_syntactically_valid_name}}.}
+see \code{\link[atable]{is_syntactically_valid_name}}. If \code{x} is a formula, then its format must
+be \code{target_cols ~ group_col | split_cols}. See other arguments for more details.}
 
-\item{...}{Passed from and to other methods.}
+\item{...}{Passed from and to other methods. You can use the ellipsis ... to modify atable:
+For example the default-statistics for numeric variables are mean and sd. To change these statistics pass
+a function to argument \code{statistics.numeric}, that calculates the statistics you prefer for your data.
+
+See examples below how to modify atable by ... .
+
+Actually \code{statistics.numeric} is passed to \code{\link{statistics}} and thus documented there,
+but for convenience it also documented here.
+
+Here is a list of the statistics and hypothesis tests that can be modfied by \code{...} :
+\itemize{
+  \item{\code{statistics.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+  If a function, then it will replace \code{atable:::statistics.numeric} when atable is called.
+  The function must mimic \code{\link{statistics}}: see the help there.}
+
+  \item{\code{statistics.factor}}{: Analog to argument statistics.numeric.}
+
+  \item{\code{statistics.ordered}}{: Analog to argument statistics.numeric.}
+
+  \item{\code{two_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+  If a function, then it will replace \code{atable:::two_sample_htest.numeric} when atable is called.
+  The function must mimic \code{\link{two_sample_htest}}: see the help there.}
+
+  \item{\code{two_sample_htest.factor}}{: Analog to argument two_sample_htest.numeric}
+
+  \item{\code{two_sample_htest.ordered}}{: Analog to argument two_sample_htest.numeric}
+
+
+  \item{\code{multi_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+  If a function, then it will replace \code{atable:::multi_sample_htest.numeric} when atable is called.
+  The function must mimic \code{\link{multi_sample_htest}}: see the help there.}
+
+  \item{\code{multi_sample_htest.factor}}{: Analog to argument multi_sample_htest.numeric}
+
+  \item{\code{multi_sample_htest.ordered}}{: Analog to argument multi_sample_htest.numeric}
+
+  \item{\code{format_statistics.statistics_numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+  If a function, then it will replace \code{atable:::format_statistics.statistics_numeric}.
+  The function must mimic \code{\link{format_statistics}}: see the help there.}
+
+  \item{\code{format_statistics.statistics_factor}}{: Analog to argument format_statistics.statistics_numeric}
+
+  \item{\code{format_tests.htest}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+  If a function, then it will replace \code{format_tests.htest}.
+  The function must mimic \code{\link{format_tests}}: see the help there.}
+
+  \item{\code{format_tests.htest_with_effect_size}}{: Analog to argument format_tests.htest}
+
+
+
+ }}
 
 \item{target_cols}{A character vector containing some column names of \code{x}.
 
@@ -43,8 +94,8 @@ Default is \code{NULL}, meaning that no hypothesis tests are applied.}
 Default is \code{NULL}, meaning that no splitting is done.}
 
 \item{format_to}{A character vector of length 1. Specifies the format of the output of \code{atable}.
-Possible values are \code{'Latex'}, \code{'Word'}, \code{'Raw'}, \code{'HTML'}.
-Default is defined \code{\link{atable_options}}.}
+Possible values are \code{'Latex'}, \code{'Word'}, \code{'Raw'}, \code{'HTML'}, \code{'Console'}.
+Default is defined in \code{\link{atable_options}}.}
 
 \item{drop_levels}{A logical. If \code{TRUE} then \code{\link[base]{droplevels}} is called on \code{group_col}
 and \code{split_cols} beforefurther processsing. Default is \code{TRUE}.}
@@ -69,7 +120,7 @@ Results depend on \code{format_to}:
 contain all results of the descriptve statistics and the hypothesis tests.
 This format useful, when extracting a specific result unformated
  (when \code{format_to} is not \code{'Raw'} all numbers are also returned, but as rounded
- characters for pretty printing and squeezed into a data.frame).
+ characters for printing and squeezed into a data.frame).
 \itemize{
  \item{\code{'statistics_result'}: } { contains a data.frame with colnames \code{c(split_cols, group_col, target_cols}.
  \code{split_cols} and \code{group_col} retain their original values (now as factor).
@@ -93,6 +144,8 @@ The hypothesis test are arranged horizontally.
 }
 \item{\code{'HTML'}: }{Same as for \code{format_to = 'Word'} but a different character indents
 the first column.}
+#' \item{\code{'Console'}: }{Meant for printing in the R console for interactive analysis. Same as for \code{format_to = 'Word'} but a different character indents
+the first column.}
 \item{\code{'Latex'}: }{Same as for \code{format_to = 'Word'} but a different character indents
 the first column and with \code{\link{translate_to_LaTeX}} applied afterwards. }
 }
@@ -109,7 +162,7 @@ Applies descriptive statistics and hypothesis tests to data, and arranges the re
 
 \examples{
 # See vignette for more examples:
-# utils::vignette("atable_usage", package = "atable")
+# utils::vignette('atable_usage', package = 'atable')
 
 # Analyse datasets::ToothGrowth:
 # Length of tooth for each dose level and delivery method:
@@ -130,5 +183,12 @@ atable(Numeric + Logical + Factor + Ordered ~ Group | Split1 + Split2,
   atable::test_data, format_to = 'HTML')
 # Print as .html with e.g. knitr::kable and options(knitr.kable.NA = '')
 
-# For print on Console use format_to = 'Word'.
+# Modify atable: calculate median and MAD for numeric variables
+new_stats  <- function(x, ...){list(Median = median(x, na.rm = TRUE),
+                                    MAD = mad(x, na.rm = TRUE))}
+atable(atable::test_data,
+       target_cols = c('Numeric', 'Numeric2'),
+       statistics.numeric = new_stats,
+       format_to = 'Console')
+# Print in Console with format_to = 'Console'.
 }

@@ -10,6 +10,19 @@ MYPKGOPTIONS <- settings::options_manager(
   labels_Mean_SD = "Mean (SD)",
   labels_valid_missing = "valid (missing)",
   format_to = "Latex",
+  statistics.numeric = NULL,
+  statistics.factor = NULL,
+  statistics.ordered = NULL,
+  two_sample_htest.factor = NULL,
+  two_sample_htest.numeric = NULL,
+  two_sample_htest.ordered = NULL,
+  multi_sample_htest.factor = NULL,
+  multi_sample_htest.numeric = NULL,
+  multi_sample_htest.ordered = NULL,
+  format_statistics.statistics_factor = NULL,
+  format_statistics.statistics_numeric = NULL,
+  format_tests.htest = NULL,
+  format_tests.htest_with_effect_size = NULL,
   format_p_values = function(x){
     if (!is.nan(x) & x < 0.001){
       return("<0.001")
@@ -30,9 +43,7 @@ MYPKGOPTIONS <- settings::options_manager(
     }
 
 )
-
 # User function that gets exported:
-
 #' Set or get options
 #'
 #' Set or get options for the atable-package via the \code{\link[settings]{settings}} package.
@@ -84,6 +95,46 @@ MYPKGOPTIONS <- settings::options_manager(
 #'   \item{\code{colname_for_value}}{: A character of length 1. Default is \code{'value'}.
 #'   This character shows up in the results of \code{\link{atable}} when \code{group_col} is \code{NULL}.
 #'   The column will contain the results of the \code{\link{statistics}}.}
+#'
+#'   \item{\code{statistics.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::statistics.numeric} when atable is called.
+#'   The function must mimic \code{\link{statistics}}: see the help there.}
+#'
+#'   \item{\code{statistics.factor}}{: Analog to argument statistics.numeric.}
+#'
+#'   \item{\code{statistics.ordered}}{: Analog to argument statistics.numeric.}
+#'
+#'   \item{\code{two_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::two_sample_htest.numeric} when atable is called.
+#'   The function must mimic \code{\link{two_sample_htest}}: see the help there.}
+#'
+#'   \item{\code{two_sample_htest.factor}}{: Analog to argument two_sample_htest.numeric}
+#'
+#'   \item{\code{two_sample_htest.ordered}}{: Analog to argument two_sample_htest.numeric}
+#'
+#'
+#'   \item{\code{multi_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::multi_sample_htest.numeric} when atable is called.
+#'   The function must mimic \code{\link{multi_sample_htest}}: see the help there.}
+#'
+#'   \item{\code{multi_sample_htest.factor}}{: Analog to argument multi_sample_htest.numeric}
+#'
+#'   \item{\code{multi_sample_htest.ordered}}{: Analog to argument multi_sample_htest.numeric}
+#'
+#'   \item{\code{format_statistics.statistics_numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::format_statistics.statistics_numeric}.
+#'   The function must mimic \code{\link{format_statistics}}: see the help there.}
+#'
+#'   \item{\code{format_statistics.statistics_factor}}{: Analog to argument format_statistics.statistics_numeric}
+#'
+#'   \item{\code{format_tests.htest}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{format_tests.htest}.
+#'   The function must mimic \code{\link{format_tests}}: arguments are \code{x} and the ellipsis ... .
+#'   Result is a data.frame with 1 rows and unique colnames.}
+#'
+#'   \item{\code{format_tests.htest_with_effect_size}}{: Analog to argument format_tests.htest}
+#'
+#'
 #'
 #'   \item{\code{format_p_values}}{: A function with one argument returning a character with same length as the argument.
 #'    This functions is called by \code{\link{format_tests}} to produce printable p-values.}

@@ -36,7 +36,7 @@ For every subset defined by a triplet of the levels of Split1, Split2 and Group 
 }
 \examples{
 atable::atable(Logical+ Numeric + Factor + Ordered ~ Group | Split1 + Split2,
- atable::standardized_test_data, add_levels_for_NA = TRUE, format_to = "Word")
+ atable::standardized_test_data, add_levels_for_NA = TRUE, format_to = 'Word')
 
 }
 \keyword{datasets}

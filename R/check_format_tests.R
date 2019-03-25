@@ -7,11 +7,8 @@
 #' \code{x} is a data.frame with exactly one row and with unique colnames. Else throws an error.
 #'
 check_format_tests <- function(x) {
-  stopifnot(is.data.frame(x),
-            nrow(x) == 1,
-            ncol(x) > 0,
-            anyDuplicated(colnames(x)) == 0,
-            sapply(x, is.atomic))
+    stopifnot(is.data.frame(x), nrow(x) == 1, ncol(x) > 0, anyDuplicated(colnames(x)) ==
+        0, sapply(x, is.atomic))
 
-  return(TRUE)
+    return(TRUE)
 }

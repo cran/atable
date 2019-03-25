@@ -18,6 +18,13 @@
 #' @param value An atomic vector.
 #' @param group A factor, same length as \code{value}.
 #' @param ... Passed to methods.
+#' @param multi_sample_htest.numeric Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::multi_sample_htest.numeric}.
+#'   The function must mimic \code{\link{multi_sample_htest.numeric}}: arguments are
+#'   \code{value}, \code{group} and the ellipsis ... .
+#'   Result is a named list with \code{length} > 0 with unique names.
+#' @param multi_sample_htest.ordered Analog to argument two_sample_htest.numeric
+#' @param multi_sample_htest.factor Analog to argument two_sample_htest.numeric
 #'
 #' @return
 #' A named list with length > 0.
@@ -40,7 +47,16 @@ multi_sample_htest.logical <- function(value, group, ...) {
 
 #' @export
 #' @describeIn multi_sample_htest Calls \code{\link[stats]{chisq.test}}.
-multi_sample_htest.factor <- function(value, group, ...) {
+multi_sample_htest.factor <- function(value, group, multi_sample_htest.factor = NULL,
+    ...) {
+
+    if (is.function(multi_sample_htest.factor))
+        return(multi_sample_htest.factor(value, group, ...))
+
+    if (is.function(atable_options("multi_sample_htest.factor")))
+        return(atable_options("multi_sample_htest.factor")(value, group, ...))
+
+
     test <- try(stats::chisq.test(group, value), silent = TRUE)
 
     out <- if (class(test) == "try-error") {
@@ -64,13 +80,24 @@ multi_sample_htest.factor <- function(value, group, ...) {
 #' @export
 #' @describeIn multi_sample_htest Casts \code{value} to factor and then calls method \code{multi_sample_htest} again.
 multi_sample_htest.character <- function(value, group, ...) {
-  return(multi_sample_htest(as.factor(value), group, ...))
+    return(multi_sample_htest(as.factor(value), group, ...))
 }
 
 
 #' @export
 #' @describeIn multi_sample_htest Calls \code{\link[stats]{kruskal.test}}.
-multi_sample_htest.ordered <- function(value, group, ...) {
+multi_sample_htest.ordered <- function(value, group, multi_sample_htest.ordered = NULL,
+    ...) {
+
+
+
+    if (is.function(multi_sample_htest.ordered))
+        return(multi_sample_htest.ordered(value, group, ...))
+
+    if (is.function(atable_options("multi_sample_htest.ordered")))
+        return(atable_options("multi_sample_htest.ordered")(value, group, ...))
+
+
     group <- factor(group)
     value <- as.numeric(value)  # kruskal.test demands class numeric, not ordered factor. Even when it is based on ranks
 
@@ -100,6 +127,15 @@ multi_sample_htest.ordered <- function(value, group, ...) {
 
 #' @export
 #' @describeIn multi_sample_htest Calls \code{multi_sample_htest}'s method on \code{ordered(value)}.
-multi_sample_htest.numeric <- function(value, group, ...) {
+multi_sample_htest.numeric <- function(value, group, multi_sample_htest.numeric = NULL,
+    ...) {
+
+    if (is.function(multi_sample_htest.numeric))
+        return(multi_sample_htest.numeric(value, group, ...))
+
+    if (is.function(atable_options("multi_sample_htest.numeric")))
+        return(atable_options("multi_sample_htest.numeric")(value, group, ...))
+
+
     return(multi_sample_htest(ordered(value), group, ...))
 }

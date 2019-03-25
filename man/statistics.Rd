@@ -6,35 +6,49 @@
 \alias{statistics.factor}
 \alias{statistics.logical}
 \alias{statistics.character}
+\alias{statistics.ordered}
 \alias{statistics.count_me}
 \title{Calculates descriptive statistics}
 \usage{
 statistics(x, ...)
 
-\method{statistics}{numeric}(x, ...)
+\method{statistics}{numeric}(x, statistics.numeric = NULL, ...)
 
-\method{statistics}{factor}(x, ...)
+\method{statistics}{factor}(x, statistics.factor = NULL, ...)
 
 \method{statistics}{logical}(x,
   labels_TRUE_FALSE = atable_options("labels_TRUE_FALSE"), ...)
 
 \method{statistics}{character}(x, ...)
 
+\method{statistics}{ordered}(x, statistics.ordered = NULL, ...)
+
 \method{statistics}{count_me}(x, ...)
 }
 \arguments{
-\item{x}{An object.}
+\item{x}{An object. Statistics will be calculated of \code{x}.}
 
 \item{...}{Passed from and to other methods.}
 
+\item{statistics.numeric}{Either \code{NULL} or a function. Default is \code{NULL}.
+If a function, then it will replace \code{atable:::statistics.numeric}.
+The function must mimic \code{\link{statistics}}: arguments are \code{x} and the ellipsis ... .
+Result is a named list with \code{length} > 0 with unique names.}
+
+\item{statistics.factor}{Analog to argument statistics.numeric}
+
 \item{labels_TRUE_FALSE}{For relabeling logicals. See also \code{\link{atable_options}}.}
+
+\item{statistics.ordered}{Analog to argument statistics.numeric}
 }
 \value{
-A named list with length > 0. The names of the list have no duplicates.
-Function \code{\link{check_statistics}} checks if the output of statistics is suitable for further processing.
-
 The results of \code{statistics} are passed to function \code{\link{format_statistics}}.
 So the results of \code{statistics} must have a class for which the generic \code{\link{format_statistics}} has a method.
+
+\code{\link{format_statistics}} has a default method, which accepts lists. So the results of \code{statistics} can be a
+named list with length > 0. The names of the list must have no duplicates.
+
+Function \code{\link{check_statistics}} checks if the output of statistics is suitable for further processing.
 }
 \description{
 Calculates descriptive statistics depending on the class of its input.
@@ -61,6 +75,8 @@ This function is meant for nominal and ordinal scaled variables.
 \item \code{logical}: Casts \code{x} to factor, then applies \code{statistics} again. The labels for \code{TRUE} and \code{FALSE} can also be modfied by setting \code{atable_options('labels_TRUE_FALSE')}.
 
 \item \code{character}: Casts \code{x} to factor, then applies \code{statistics} again.
+
+\item \code{ordered}: Casts \code{x} to factor, then applies \code{statistics} again.
 
 \item \code{count_me}: Returns the \code{\link[base]{length}} of \code{x}. For class \code{'count_me'} see \code{\link{add_observation_column}}.
 }}

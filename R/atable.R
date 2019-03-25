@@ -3,7 +3,8 @@
 #' Applies descriptive statistics and hypothesis tests to data, and arranges the results for printing.
 #'
 #' @param x An object. If \code{x} is a data.frame, it must have unique and syntactically valid colnames,
-#' see \code{\link[atable]{is_syntactically_valid_name}}.
+#' see \code{\link[atable]{is_syntactically_valid_name}}. If \code{x} is a formula, then its format must
+#' be \code{target_cols ~ group_col | split_cols}. See other arguments for more details.
 #'
 #' @param data Passed to \code{atable(x = data, ...)}.
 #'
@@ -30,8 +31,8 @@
 #' Default is \code{NULL}, meaning that no splitting is done.
 #'
 #' @param format_to A character vector of length 1. Specifies the format of the output of \code{atable}.
-#'  Possible values are \code{'Latex'}, \code{'Word'}, \code{'Raw'}, \code{'HTML'}.
-#'  Default is defined \code{\link{atable_options}}.
+#'  Possible values are \code{'Latex'}, \code{'Word'}, \code{'Raw'}, \code{'HTML'}, \code{'Console'}.
+#'  Default is defined in \code{\link{atable_options}}.
 #'
 #' @param drop_levels A logical. If \code{TRUE} then \code{\link[base]{droplevels}} is called on \code{group_col}
 #'  and \code{split_cols} beforefurther processsing. Default is \code{TRUE}.
@@ -39,8 +40,6 @@
 #' @param add_levels_for_NA If \code{TRUE} then \code{\link[base:factor]{addNA}} is called on \code{group_col} and
 #' \code{split_cols} before further processsing. Default is \code{FALSE}.
 #'
-#' @param ... Passed from and to other methods.
-
 #' @param formula A formula of the form \code{target_cols ~ group_col | split_cols}.
 #' The \code{|} separates the \code{group_col} from the \code{split_cols}.
 #' Read the \code{|} as 'given' as in a conditional probability \code{P(target_cols | split_cols)}.
@@ -48,6 +47,58 @@
 #' \code{group_col} must be a single name if given.
 #' \code{group_col} and \code{split_cols} may be omitted and can be replaced by \code{1} in this case.
 #' The \code{|} may also be omitted if no \code{split_cols} are given.
+#'
+#' @param ... Passed from and to other methods. You can use the ellipsis ... to modify atable:
+#' For example the default-statistics for numeric variables are mean and sd. To change these statistics pass
+#' a function to argument \code{statistics.numeric}, that calculates the statistics you prefer for your data.
+#'
+#' See examples below how to modify atable by ... .
+#'
+#' Actually \code{statistics.numeric} is passed to \code{\link{statistics}} and thus documented there,
+#' but for convenience it also documented here.
+#'
+#' Here is a list of the statistics and hypothesis tests that can be modfied by \code{...} :
+#' \itemize{
+#'   \item{\code{statistics.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::statistics.numeric} when atable is called.
+#'   The function must mimic \code{\link{statistics}}: see the help there.}
+#'
+#'   \item{\code{statistics.factor}}{: Analog to argument statistics.numeric.}
+#'
+#'   \item{\code{statistics.ordered}}{: Analog to argument statistics.numeric.}
+#'
+#'   \item{\code{two_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::two_sample_htest.numeric} when atable is called.
+#'   The function must mimic \code{\link{two_sample_htest}}: see the help there.}
+#'
+#'   \item{\code{two_sample_htest.factor}}{: Analog to argument two_sample_htest.numeric}
+#'
+#'   \item{\code{two_sample_htest.ordered}}{: Analog to argument two_sample_htest.numeric}
+#'
+#'
+#'   \item{\code{multi_sample_htest.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::multi_sample_htest.numeric} when atable is called.
+#'   The function must mimic \code{\link{multi_sample_htest}}: see the help there.}
+#'
+#'   \item{\code{multi_sample_htest.factor}}{: Analog to argument multi_sample_htest.numeric}
+#'
+#'   \item{\code{multi_sample_htest.ordered}}{: Analog to argument multi_sample_htest.numeric}
+#'
+#'   \item{\code{format_statistics.statistics_numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::format_statistics.statistics_numeric}.
+#'   The function must mimic \code{\link{format_statistics}}: see the help there.}
+#'
+#'   \item{\code{format_statistics.statistics_factor}}{: Analog to argument format_statistics.statistics_numeric}
+#'
+#'   \item{\code{format_tests.htest}}{: Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{format_tests.htest}.
+#'   The function must mimic \code{\link{format_tests}}: see the help there.}
+#'
+#'   \item{\code{format_tests.htest_with_effect_size}}{: Analog to argument format_tests.htest}
+#'
+#'
+#'
+#'  }
 #'
 #'
 #' @return
@@ -57,7 +108,7 @@
 #' contain all results of the descriptve statistics and the hypothesis tests.
 #' This format useful, when extracting a specific result unformated
 #'  (when \code{format_to} is not \code{'Raw'} all numbers are also returned, but as rounded
-#'  characters for pretty printing and squeezed into a data.frame).
+#'  characters for printing and squeezed into a data.frame).
 #' \itemize{
 #'  \item{\code{'statistics_result'}: } { contains a data.frame with colnames \code{c(split_cols, group_col, target_cols}.
 #'  \code{split_cols} and \code{group_col} retain their original values (now as factor).
@@ -81,12 +132,14 @@
 #' }
 #' \item{\code{'HTML'}: }{Same as for \code{format_to = 'Word'} but a different character indents
 #' the first column.}
+#' #' \item{\code{'Console'}: }{Meant for printing in the R console for interactive analysis. Same as for \code{format_to = 'Word'} but a different character indents
+#' the first column.}
 #' \item{\code{'Latex'}: }{Same as for \code{format_to = 'Word'} but a different character indents
 #' the first column and with \code{\link{translate_to_LaTeX}} applied afterwards. }
 #' }
 #' @examples
 #' # See vignette for more examples:
-#' # utils::vignette("atable_usage", package = "atable")
+#' # utils::vignette('atable_usage', package = 'atable')
 #'
 #' # Analyse datasets::ToothGrowth:
 #' # Length of tooth for each dose level and delivery method:
@@ -107,7 +160,14 @@
 #'   atable::test_data, format_to = 'HTML')
 #'# Print as .html with e.g. knitr::kable and options(knitr.kable.NA = '')
 #'
-#' # For print on Console use format_to = 'Word'.
+#' # Modify atable: calculate median and MAD for numeric variables
+#' new_stats  <- function(x, ...){list(Median = median(x, na.rm = TRUE),
+#'                                     MAD = mad(x, na.rm = TRUE))}
+#' atable(atable::test_data,
+#'        target_cols = c('Numeric', 'Numeric2'),
+#'        statistics.numeric = new_stats,
+#'        format_to = 'Console')
+#' # Print in Console with format_to = 'Console'.
 
 
 #' @export
@@ -122,15 +182,12 @@ atable.data.frame <- function(x, target_cols, group_col = NULL, split_cols = NUL
     format_to = atable_options("format_to"), drop_levels = TRUE, add_levels_for_NA = FALSE,
     ...) {
 
-    DD = x
-    stopifnot(is_syntactically_valid_name(colnames(DD)),
-              is.character(target_cols),
-              is.character(format_to),
-              length(target_cols) > 0,
-              target_cols %in% colnames(DD),
-              is.null(group_col) || (is.character(group_col) && group_col %in% colnames(DD)),
-              is.null(split_cols) || (is.character(split_cols) && all(split_cols %in% colnames(DD))),
-              anyDuplicated(c(target_cols, group_col, split_cols)) == 0)
+    DD <- x
+    stopifnot(is_syntactically_valid_name(colnames(DD)), is.character(target_cols),
+        is.character(format_to), length(format_to) == 1, length(target_cols) > 0, all(target_cols %in% colnames(DD)),
+        is.null(group_col) || (is.character(group_col) && length(group_col) == 1 && (group_col %in% colnames(DD)) ),
+        is.null(split_cols) || (is.character(split_cols) && all(split_cols %in% colnames(DD))),
+        anyDuplicated(c(target_cols, group_col, split_cols)) == 0)
 
 
 
@@ -149,7 +206,8 @@ atable.data.frame <- function(x, target_cols, group_col = NULL, split_cols = NUL
 
     # add one level to factors without a level factors without a level can happen if
     # a factor contains only NA and droplevels is applied
-    DD[c(group_col, split_cols)] <- lapply(DD[c(group_col, split_cols)], function(x) if (nlevels(x) == 0) {
+    DD[c(group_col, split_cols)] <- lapply(DD[c(group_col, split_cols)], function(x) if (nlevels(x) ==
+        0) {
         addNA(x)
     } else {
         x
@@ -172,7 +230,7 @@ atable.data.frame <- function(x, target_cols, group_col = NULL, split_cols = NUL
 
 
 
-    # I want to calculate he number of observations in every group.  I do this by
+    # I want to calculate the number of observations in every group.  I do this by
     # adding a column called atable_options('colname_for_observations') of class
     # 'count_me' to DD.  The package atable defines the function
     # 'statistics.count_me'. It just returns the length of the vector.
@@ -180,21 +238,23 @@ atable.data.frame <- function(x, target_cols, group_col = NULL, split_cols = NUL
 
 
 
-    # Check if group_col or split_cols are NULL and call the appropriate atable-functions
+    # Check if group_col or split_cols are NULL and call the appropriate
+    # atable-functions
     result <- if (is.null(group_col)) {
         if (is.null(split_cols)) {
-            atable_unsplitted_ungrouped(DD = DD, target_cols = target_cols, format_to = format_to)
+            atable_unsplitted_ungrouped(DD = DD, target_cols = target_cols, format_to = format_to,
+                ...)
         } else {
-            atable_splitted_ungrouped(DD = DD, target_cols = target_cols,
-                                      split_cols = split_cols, format_to = format_to)
+            atable_splitted_ungrouped(DD = DD, target_cols = target_cols, split_cols = split_cols,
+                format_to = format_to, ...)
         }
     } else {
         if (is.null(split_cols)) {
             atable_unsplitted_grouped(DD = DD, target_cols = target_cols, group_col = group_col,
-                                    split_cols = split_cols, format_to = format_to)
+                split_cols = split_cols, format_to = format_to, ...)
         } else {
             atable_splitted_grouped(DD = DD, target_cols = target_cols, group_col = group_col,
-                                    split_cols = split_cols, format_to = format_to)
+                split_cols = split_cols, format_to = format_to, ...)
         }
     }
 

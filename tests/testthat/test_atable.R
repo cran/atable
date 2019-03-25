@@ -379,6 +379,11 @@ test_that("empty data.frame is allowed", {
   expect_true(is.data.frame(atable(EE, target_cols, group_col, split_cols, drop_levels = FALSE)))
 })
 
+# data.frame without names
+test_that("data.frame without names not allowed", {
+  expect_error(atable(unname(atable::test_data), target_cols = "Numeric"))
+})
+
 # data.frame with NA ####
 
 test_that("data.frame with only NA is allowed", {

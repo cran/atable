@@ -38,6 +38,8 @@ Adds new lines with the indented keys to the data.frame.
 Meant for wide tables that need to be narrower and more 'readable'
 Meant for plotting with e.g. xtable::xtable or Hmisc::latex or officer::body_add_table.
 Look at the examples for a more precise description.
+Meant for left-aligned columns. Thats why the \code{indent_character} is inserted
+to the left of the original values.
 }
 \examples{
 

@@ -14,12 +14,10 @@
 
 
 check_statistics <- function(x) {
-  stopifnot(is.list(x),
-            length(x) > 0)
+    stopifnot(is.list(x), length(x) > 0)
 
-  the_names <- names(x)
-  stopifnot(!is.null(the_names),
-            anyDuplicated(the_names) == 0)
+    the_names <- names(x)
+    stopifnot(!is.null(the_names), anyDuplicated(the_names) == 0)
 
-  return(TRUE)
+    return(TRUE)
 }

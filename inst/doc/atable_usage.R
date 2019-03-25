@@ -128,6 +128,14 @@ options(knitr.kable.NA = '')
 # knitr::kable(for_HTML, caption="HTML table with atable") # not run.
 
 
+## ----Console, echo=TRUE--------------------------------------------------
+atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
+                           mtcars,
+                           format_to = "Console")
+
+## ----atable_options, echo=TRUE, eval=FALSE-------------------------------
+#  atable_options(format_to = "Console")
+
 ## ----Tabelle with stats and test, results='asis', echo=FALSE-------------
 
 
@@ -167,12 +175,18 @@ Hmisc::latex(DD,
       rowname = NULL,
       first.hline.double = FALSE,
       collabel.just = c("l|", "l", "l", "l"),
-      col.just = c("L{3.5cm}|", "L{3.5cm}", "L{4cm}", "L{4cm}"),
-      where="!htbp")
+      col.just = c("p{3.5cm}|", "p{3.5cm}", "p{4cm}", "p{4cm}"),
+      where="!htbp",
+      multicol = FALSE,
+      longtable = FALSE,
+      booktabs = FALSE)
+
+
+
 
 ## ----Replace two_sample_htest.numeric, results='markup', echo=TRUE-------
 # write a new function:
-new_two_sample_htest_numeric <- function(value, group, ...){
+new_two_sample_htest <- function(value, group, ...){
 
   d <- data.frame(value = value, group = group)
 
@@ -193,17 +207,10 @@ new_two_sample_htest_numeric <- function(value, group, ...){
 }
 
 
-## ----assignInNamespace, results='markup', echo=TRUE----------------------
-
-utils::assignInNamespace(x = "two_sample_htest.numeric",
-                         value = new_two_sample_htest_numeric,
-                         ns = "atable",
-                         envir = as.environment("package:atable") )
-
 ## ----Modify statistics numeric, results='markup', echo=TRUE--------------
 
 
-new_statistics_numeric <- function(x, ...){
+new_stats <- function(x, ...){
 
   statistics_out <- list(Median = median(x, na.rm = TRUE),
                          MAD = mad(x, na.rm = TRUE),
@@ -213,21 +220,21 @@ new_statistics_numeric <- function(x, ...){
   return(statistics_out)
 }
 
-# Add the new metdhod to atable's namespace
-utils::assignInNamespace(x = "statistics.numeric",
-                         value = new_statistics_numeric,
-                         ns = "atable",
-                         envir = as.environment("package:atable") )
 
+## ----replace via atable_options, results='markup', echo=TRUE-------------
+atable_options("statistics.numeric" = new_stats)
 
-
-## ----Print modify numeric, echo=TRUE, results='asis'---------------------
-
+## ----replace via atable, , results='markup', echo=TRUE-------------------
 the_table <-  atable::atable(atable::test_data,
                              target_cols = "Numeric",
                              group_col = "Group",
                              split_cols = "Split1",
-                             format_to = "Latex")
+                             format_to = "Latex",
+                             two_sample_htest.numeric = new_two_sample_htest)
+
+
+
+## ----Print modify numeric, echo=TRUE, results='asis'---------------------
 
 Hmisc::latex(the_table,
              file = "",

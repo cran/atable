@@ -20,10 +20,9 @@ test_caller <- function(DD, group_col, value_col, ...) {
     # chosen
 
 
-    stopifnot(is.character(group_col) & length(group_col) == 1,
-              is.character(value_col) & length(value_col) == 1,
-              group_col %in% colnames(DD) & value_col %in% colnames(DD),
-              is.factor(DD[[group_col]]))
+    stopifnot(is.character(group_col), length(group_col) == 1, is.character(value_col),
+        length(value_col) == 1, group_col %in% colnames(DD), value_col %in% colnames(DD),
+        is.factor(DD[[group_col]]))
 
 
     # Dispatch is on the first argument for S3-functions.  I use value to decide
@@ -47,13 +46,6 @@ test_caller <- function(DD, group_col, value_col, ...) {
 }
 
 apply_tests_helper <- function(DD, target_cols, group_col, ...) {
-    b <- is.data.frame(DD) && is.character(target_cols) && is.character(group_col) &&
-        length(group_col) == 1 && target_cols %in% colnames(DD) && group_col %in%
-        colnames(DD) && is.factor(DD[[group_col]]) && nlevels(DD[[group_col]]) >
-        0 && length(intersect(target_cols, group_col)) == 0
-
-
-
 
     test_out <- mapply(test_caller, value_col = target_cols, MoreArgs = list(DD = DD,
         group_col = group_col, ...), SIMPLIFY = FALSE)
@@ -81,7 +73,7 @@ apply_tests <- function(DD, target_cols, group_col, split_cols, ...) {
     splitted <- base::split(DD, DD[split_cols], drop = FALSE)
 
 
-    Raw <- plyr::ldply(splitted, apply_tests_helper, target_cols, group_col)
+    Raw <- plyr::ldply(splitted, apply_tests_helper, target_cols, group_col, ...)
 
     # i want to keep the group_col and split_cols as they are. split mangles their
     # values in one column .id, separated by .
@@ -95,11 +87,12 @@ apply_tests <- function(DD, target_cols, group_col, split_cols, ...) {
     return(Raw)
 }
 
-format_tests_caller <- function(x, cols) {
-    out <- lapply(x[cols], Vectorize(format_tests, vectorize.args = "x", SIMPLIFY = FALSE))
+format_tests_caller <- function(x, cols, ...) {
+    out <- lapply(x[cols], Vectorize(format_tests, vectorize.args = "x", SIMPLIFY = FALSE),
+        ...)
 
 
-    # yyy
+
 
     b <- lapply(out, Vectorize(check_format_tests))
 
@@ -201,7 +194,7 @@ add_name_to_statistics.data.frame <- function(x, name, colname_for_variable = at
 
 apply_statistics_helper <- function(x, cols, ...) {
 
-    out <- lapply(x[cols], statistics)
+    out <- lapply(x[cols], statistics, ...)
 
     b <- lapply(out, check_statistics)
 
@@ -218,11 +211,11 @@ apply_statistics_helper <- function(x, cols, ...) {
 }
 
 
-apply_statistics <- function(DD, target_cols, split_cols) {
+apply_statistics <- function(DD, target_cols, split_cols, ...) {
 
     splitted <- split(DD, DD[split_cols], drop = FALSE)
 
-    Raw <- plyr::ldply(splitted, apply_statistics_helper, cols = target_cols)
+    Raw <- plyr::ldply(splitted, apply_statistics_helper, cols = target_cols, ...)
 
 
     # i want to keep the group_col and split_cols as they are. split mangles their
@@ -242,8 +235,9 @@ apply_statistics <- function(DD, target_cols, split_cols) {
 
 
 
-format_statistics_caller <- function(x, cols) {
-    out <- lapply(x[cols], Vectorize(format_statistics, vectorize.args = "x", SIMPLIFY = FALSE))
+format_statistics_caller <- function(x, cols, ...) {
+    out <- lapply(x[cols], Vectorize(format_statistics, vectorize.args = "x", SIMPLIFY = FALSE),
+        ...)
 
     b <- lapply(out, Vectorize(check_format_statistics))
 
@@ -372,23 +366,34 @@ arrange_helper <- function(tab, split_cols, format_to) {
         tab <- indent_data_frame(tab, keys = c(split_cols, atable_options("colname_for_variable"),
             "tag"), indent_character = " &emsp; ")
         return(tab)
+    }, Console = {
+        tab <- indent_data_frame(tab, keys = c(split_cols, atable_options("colname_for_variable"),
+            "tag"), indent_character = "    ")
+        tab[is.na(tab)] <- ""
+
+        class(tab) <- c("atable", class(tab))
+
+        return(tab)
     }, {
         stop("format_to ", format_to, " unknown.")
     })
 }
 
+#' @export
+print.atable <- function(x, ...)print(as.data.frame(x), right = FALSE, ...)
 
 
+atable_splitted_grouped <- function(DD, target_cols, group_col, split_cols, format_to,
+    ...) {
 
-atable_splitted_grouped <- function(DD, target_cols, group_col, split_cols, format_to) {
     Observation_and_target_cols <- c(atable_options("colname_for_observations"),
         target_cols)
 
 
     statistics_result <- apply_statistics(DD, Observation_and_target_cols, c(group_col,
-        split_cols))
+        split_cols), ...)
 
-    tests_result <- apply_tests(DD, target_cols, group_col, split_cols)
+    tests_result <- apply_tests(DD, target_cols, group_col, split_cols, ...)
 
 
 
@@ -397,10 +402,10 @@ atable_splitted_grouped <- function(DD, target_cols, group_col, split_cols, form
     }
 
     formated_statistics_result <- plyr::ddply(statistics_result, c(group_col, split_cols),
-        format_statistics_caller, cols = Observation_and_target_cols)
+        format_statistics_caller, cols = Observation_and_target_cols, ...)
 
     formated_tests_result <- plyr::ddply(tests_result, split_cols, format_tests_caller,
-        cols = target_cols)
+        cols = target_cols, ...)
 
 
 
@@ -409,16 +414,17 @@ atable_splitted_grouped <- function(DD, target_cols, group_col, split_cols, form
     return(atable_result)
 }
 
-atable_unsplitted_grouped <- function(DD, target_cols, group_col, split_cols, format_to) {
+atable_unsplitted_grouped <- function(DD, target_cols, group_col, split_cols, format_to,
+    ...) {
 
     Observation_and_target_cols <- c(atable_options("colname_for_observations"),
         target_cols)
 
     statistics_result <- apply_statistics(DD, Observation_and_target_cols, c(group_col,
-        split_cols))
+        split_cols), ...)
 
     # cannot do ddply as in atable_splitted_ungrouped because split_col=NULL
-    tests_result <- apply_tests_helper(DD, target_cols, group_col)
+    tests_result <- apply_tests_helper(DD, target_cols, group_col, ...)
 
 
     if (identical(format_to, "Raw")) {
@@ -426,9 +432,10 @@ atable_unsplitted_grouped <- function(DD, target_cols, group_col, split_cols, fo
     }
 
     formated_statistics_result <- plyr::ddply(statistics_result, c(group_col, split_cols),
-        format_statistics_caller, cols = Observation_and_target_cols)
+        format_statistics_caller, cols = Observation_and_target_cols, ...)
 
-    formated_tests_result <- format_tests_caller(tests_result, cols = target_cols)
+    formated_tests_result <- format_tests_caller(tests_result, cols = target_cols,
+        ...)
 
 
     atable_result <- arrange_statistics_and_tests(formated_statistics_result, formated_tests_result,
@@ -436,11 +443,13 @@ atable_unsplitted_grouped <- function(DD, target_cols, group_col, split_cols, fo
     return(atable_result)
 }
 
-atable_splitted_ungrouped <- function(DD, target_cols, split_cols, format_to) {
+atable_splitted_ungrouped <- function(DD, target_cols, split_cols, format_to, ...) {
+
     Observation_and_target_cols <- c(atable_options("colname_for_observations"),
         target_cols)
 
-    statistics_result <- apply_statistics(DD, Observation_and_target_cols, split_cols)
+    statistics_result <- apply_statistics(DD, Observation_and_target_cols, split_cols,
+        ...)
 
     if (identical(format_to, "Raw")) {
         return(list(statistics_result = statistics_result))
@@ -448,7 +457,7 @@ atable_splitted_ungrouped <- function(DD, target_cols, split_cols, format_to) {
 
 
     formated_statistics_result <- plyr::ddply(statistics_result, split_cols, format_statistics_caller,
-        cols = Observation_and_target_cols)
+        cols = Observation_and_target_cols, ...)
 
 
     atable_result <- arrange_statistics(formated_statistics_result, split_cols, format_to)
@@ -457,12 +466,14 @@ atable_splitted_ungrouped <- function(DD, target_cols, split_cols, format_to) {
     return(atable_result)
 }
 
-atable_unsplitted_ungrouped <- function(DD, target_cols, format_to) {
+atable_unsplitted_ungrouped <- function(DD, target_cols, format_to, ...) {
 
     Observation_and_target_cols <- c(atable_options("colname_for_observations"),
         target_cols)
 
-    statistics_result <- apply_statistics_helper(DD, Observation_and_target_cols)
+    statistics_result <- apply_statistics_helper(DD, Observation_and_target_cols,
+        ...)
+
 
 
     if (identical(format_to, "Raw")) {
@@ -470,13 +481,11 @@ atable_unsplitted_ungrouped <- function(DD, target_cols, format_to) {
     }
 
 
-    formated_statistics_result <- format_statistics_caller(statistics_result, Observation_and_target_cols)
+    formated_statistics_result <- format_statistics_caller(statistics_result, Observation_and_target_cols,
+        ...)
 
     split_cols <- NULL  # i do not want to write another helper function.
     # Just use arrange_statistics, which uses split_cols.
     atable_result <- arrange_statistics(formated_statistics_result, split_cols, format_to)
     return(atable_result)
 }
-
-
-

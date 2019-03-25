@@ -13,24 +13,37 @@ two_sample_htest(value, group, ...)
 
 \method{two_sample_htest}{character}(value, group, ...)
 
-\method{two_sample_htest}{factor}(value, group, ...)
+\method{two_sample_htest}{factor}(value, group,
+  two_sample_htest.factor = NULL, ...)
 
 \method{two_sample_htest}{logical}(value, group, ...)
 
-\method{two_sample_htest}{numeric}(value, group, ...)
+\method{two_sample_htest}{numeric}(value, group,
+  two_sample_htest.numeric = NULL, ...)
 
-\method{two_sample_htest}{ordered}(value, group, ...)
+\method{two_sample_htest}{ordered}(value, group,
+  two_sample_htest.ordered = NULL, ...)
 }
 \arguments{
-\item{value}{An atomic vector.}
+\item{value}{An atomic vector. These values will be tested.}
 
-\item{group}{A factor with two levels and same length as \code{value}. Defines the two groups
-of \code{value}.}
+\item{group}{A factor with two levels and same length as \code{value}.
+Defines the two groups of \code{value}, that are compared by a two sample hypothesis tests.}
 
 \item{...}{Passed to methods.}
+
+\item{two_sample_htest.factor}{Analog to argument two_sample_htest.numeric}
+
+\item{two_sample_htest.numeric}{Either \code{NULL} or a function. Default is \code{NULL}.
+If a function, then it will replace \code{atable:::two_sample_htest.numeric}.
+The function must mimic \code{\link{two_sample_htest.numeric}}: arguments are
+\code{value}, \code{group} and the ellipsis ... .
+Result is a named list with \code{length} > 0 with unique names.}
+
+\item{two_sample_htest.ordered}{Analog to argument two_sample_htest.numeric}
 }
 \value{
-A named list with length > 0.
+A named list with length > 0, where all elements of the list are atomic and have the same length.
 
 Most hypothesis-test-functions in R like \code{\link[stats]{t.test}} or \code{\link[stats]{chisq.test}}
 return an object of class \code{'htest'}. \code{'htest'}-objects are a suitable output for function

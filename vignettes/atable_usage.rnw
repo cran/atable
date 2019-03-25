@@ -17,9 +17,9 @@
 
 
 \usepackage{array}
-\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+% \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+% \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+% \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 
 
 % \usepackage[style=numeric, url=false, backend=biber, sorting=none]{biblatex}
@@ -28,7 +28,7 @@
 \RequirePackage[sectionbib,round]{natbib}
 \bibliographystyle{abbrvnat}
 
-\usepackage[table]{xcolor}
+% \usepackage[table]{xcolor}
 
 \usepackage{csquotes}
 
@@ -246,12 +246,25 @@ options(knitr.kable.NA = '')
 
 @
 
+\subsection{Console}
+For interactive analysis the results of atable can also be printed human readable in the console.
+<<Console, echo=TRUE>>=
+atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
+                           mtcars,
+                           format_to = "Console")
+@
+Note that argument \verb|format_to| may also be set globally via
+<<atable_options, echo=TRUE, eval=FALSE>>=
+atable_options(format_to = "Console")
+@
+
+
 \section{Scale of measurement, classes and atable} \label{sec:Scale of measurement classes and atable}
 
 Scale of measurement \cite{Stevens1946} is a well known concept in statistics. The scales are: nominal, ordinal and interval. The scale of measurement narrows operations, statistics and tests that are applicable and meaningful for a variable. Some classes in R have the same properties as these scales of measurement. E.g.\ class factor matches the nominal scale, class ordered matches scale ordinal and class numeric maths the interval scale. atable builds on this matching: Depending on the class of a variable suitable descriptive statistics and hypothesis tests are chosen. See table \ref{tab:classesandatable} for details.
 
 
-\rowcolors{2}{white}{gray!25}
+% \rowcolors{2}{white}{gray!25}
 <<Tabelle with stats and test, results='asis', echo=FALSE>>=
 
 
@@ -291,10 +304,16 @@ Hmisc::latex(DD,
       rowname = NULL,
       first.hline.double = FALSE,
       collabel.just = c("l|", "l", "l", "l"),
-      col.just = c("L{3.5cm}|", "L{3.5cm}", "L{4cm}", "L{4cm}"),
-      where="!htbp")
+      col.just = c("p{3.5cm}|", "p{3.5cm}", "p{4cm}", "p{4cm}"),
+      where="!htbp",
+      multicol = FALSE,
+      longtable = FALSE,
+      booktabs = FALSE)
+
+
+
 @
-\rowcolors{1}{white}{white}
+% \rowcolors{1}{white}{white}
 
 
 The statistical tests in table \ref{tab:classesandatable} are meant for two or more independent samples, which arise in parallel group controlled trials. The statistical tests are all non-parametric. Parametric alternatives exists which have greater statistical power if their requirements are met by the data, but non-parametric tests are chosen for their broader field of application. Additionally just because this random package here uses these tests, does not mean that these tests are suitable to analyse a specific study.
@@ -320,7 +339,7 @@ This example replaces \verb|two_sample_htest.numeric| with a new function that a
 
 <<Replace two_sample_htest.numeric, results='markup', echo=TRUE>>=
 # write a new function:
-new_two_sample_htest_numeric <- function(value, group, ...){
+new_two_sample_htest <- function(value, group, ...){
 
   d <- data.frame(value = value, group = group)
 
@@ -342,23 +361,12 @@ new_two_sample_htest_numeric <- function(value, group, ...){
 
 @
 
-This new function currently lives in the user's workspace. But it must also live in atable's namespace and replace the already existing method. This is done by:
-
-<<assignInNamespace, results='markup', echo=TRUE>>=
-
-utils::assignInNamespace(x = "two_sample_htest.numeric",
-                         value = new_two_sample_htest_numeric,
-                         ns = "atable",
-                         envir = as.environment("package:atable") )
-@
-
-
-Now replace \verb|statistics.numeric| with a new function which calculates the median, MAD, mean and sd. See the documentation of \verb|statistics|: the function has one argument called $x$ and the ellipsis $\dots$. The function must return a named list.
+Now create a new version of \verb|statistics.numeric| that calculates the median, MAD, mean and sd. See the documentation of \verb|statistics|: the function has one argument called $x$ and the ellipsis $\dots$. The function must return a named list.
 
 <<Modify statistics numeric, results='markup', echo=TRUE>>=
 
 
-new_statistics_numeric <- function(x, ...){
+new_stats <- function(x, ...){
 
   statistics_out <- list(Median = median(x, na.rm = TRUE),
                          MAD = mad(x, na.rm = TRUE),
@@ -368,23 +376,29 @@ new_statistics_numeric <- function(x, ...){
   return(statistics_out)
 }
 
-# Add the new metdhod to atable's namespace
-utils::assignInNamespace(x = "statistics.numeric",
-                         value = new_statistics_numeric,
-                         ns = "atable",
-                         envir = as.environment("package:atable") )
-
-
 @
 
-Apply atable to \verb|test_data|, a data.frame with simulated data included in the atable package. Then print the results:
-<<Print modify numeric, echo=TRUE, results='asis'>>=
+These new function currently live in the user's workspace. But they must replace the already existing methods. \verb|atable_options| allows to replace already exsting methods globally:
 
+<<replace via atable_options, results='markup', echo=TRUE>>=
+atable_options("statistics.numeric" = new_stats)
+@
+
+Also \verb|atable| has arguments to allow this replacement:
+
+<<replace via atable, , results='markup', echo=TRUE>>=
 the_table <-  atable::atable(atable::test_data,
                              target_cols = "Numeric",
                              group_col = "Group",
                              split_cols = "Split1",
-                             format_to = "Latex")
+                             format_to = "Latex",
+                             two_sample_htest.numeric = new_two_sample_htest)
+
+
+@
+
+Then print the results:
+<<Print modify numeric, echo=TRUE, results='asis'>>=
 
 Hmisc::latex(the_table,
              file = "",
@@ -399,6 +413,7 @@ Hmisc::latex(the_table,
 
 See table \ref{tab:modifynumeric} for the results. atable now calculates the median, MAD, mean, sd, cohen's d and performs t- and Kolmogorov-Smirnov tests.
 
+All methods listed above my be altered. see also the documentation of \verb|atable| and \verb|atable_options| for a complete list.
 
 \subsection{Add new methods}
 
@@ -463,6 +478,8 @@ Hmisc::latex(the_table,
 Table \ref{tab:addedDate} shows the application the new methods for class Date. The statistics and their format are as specified.
 
 Adding new user-defined methods to atable (as described above) can introduce errors to the code. To prevent some of these possible errors, functions that check the results of \verb|statistics| and \verb|format_statistics| etc.\ were implemented in atable; these function are called \verb|check_...|. Also the user is advised to read the documentation of the generic that she/he wants to modify.
+
+
 
 % \section{References}
 % \printbibliography[heading=none]

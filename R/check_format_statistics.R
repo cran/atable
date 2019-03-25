@@ -10,12 +10,8 @@
 #' Else throws an error.
 #'
 check_format_statistics <- function(x) {
-  stopifnot(is.data.frame(x),
-            nrow(x) > 0,
-            colnames(x) == c("tag", "value"),
-            is.factor(x$tag),
-            anyDuplicated(x$tag) == 0,
-            is.character(x$value))
+    stopifnot(is.data.frame(x), nrow(x) > 0, colnames(x) == c("tag", "value"), is.factor(x$tag),
+        anyDuplicated(x$tag) == 0, is.character(x$value))
 
-  return(TRUE)
+    return(TRUE)
 }

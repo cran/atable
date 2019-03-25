@@ -7,6 +7,9 @@
 #' Meant for wide tables that need to be narrower and more 'readable'
 #' Meant for plotting with e.g. xtable::xtable or Hmisc::latex or officer::body_add_table.
 #' Look at the examples for a more precise description.
+#' Meant for left-aligned columns. Thats why the \code{indent_character} is inserted
+#' to the left of the original values.
+#'
 #'
 #'
 #' @param DD A data.frame. Should be sorted by \code{keys} with \code{keys[1]} varying slowest and \code{keys[length(keys)]} varying fastest.
@@ -58,12 +61,9 @@
 indent_data_frame <- function(DD, keys, values = setdiff(colnames(DD), keys), character_empty = "",
     numeric_empty = NA, indent_character = "\\quad", colname_indent = "Group") {
 
-    stopifnot(is.data.frame(DD),
-              is.character(keys),
-              is.character(values),
-              keys %in% colnames(DD),
-              values %in% colnames(DD),
-              anyDuplicated(c(keys, values, colname_indent)) == 0)
+    stopifnot(is.data.frame(DD), is.character(keys), is.character(values), keys %in%
+        colnames(DD), values %in% colnames(DD), anyDuplicated(c(keys, values, colname_indent)) ==
+        0)
 
 
     # at least two keys. Otherwise no indent necessary
@@ -145,5 +145,3 @@ indent_data_frame <- function(DD, keys, values = setdiff(colnames(DD), keys), ch
 
     return(DD)
 }
-
-

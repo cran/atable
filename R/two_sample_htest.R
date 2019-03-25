@@ -26,13 +26,25 @@
 #' and the CI of \code{cohen.d} contains 0 at the same time.
 #'
 #'
-#' @param value An atomic vector.
-#' @param group A factor with two levels and same length as \code{value}. Defines the two groups
-#' of \code{value}.
+#' @param value An atomic vector. These values will be tested.
+#' @param group A factor with two levels and same length as \code{value}.
+#' Defines the two groups of \code{value}, that are compared by a two sample hypothesis tests.
+#'
 #' @param ... Passed to methods.
 #'
+#'
+#' @param two_sample_htest.numeric Either \code{NULL} or a function. Default is \code{NULL}.
+#'   If a function, then it will replace \code{atable:::two_sample_htest.numeric}.
+#'   The function must mimic \code{\link{two_sample_htest.numeric}}: arguments are
+#'   \code{value}, \code{group} and the ellipsis ... .
+#'   Result is a named list with \code{length} > 0 with unique names.
+#'
+#' @param two_sample_htest.factor Analog to argument two_sample_htest.numeric
+#' @param two_sample_htest.ordered Analog to argument two_sample_htest.numeric
+#'
+#'
 #' @return
-#' A named list with length > 0.
+#' A named list with length > 0, where all elements of the list are atomic and have the same length.
 #'
 #' Most hypothesis-test-functions in R like \code{\link[stats]{t.test}} or \code{\link[stats]{chisq.test}}
 #' return an object of class \code{'htest'}. \code{'htest'}-objects are a suitable output for function
@@ -57,7 +69,15 @@ two_sample_htest.character <- function(value, group, ...) {
 #' @describeIn two_sample_htest Calls \code{\link[stats]{chisq.test}} on \code{value}.
 #' Effect size is the odds ratio calculated by \code{\link[stats]{fisher.test}} (if \code{value} has two levels),
 #' or Cramer's V by \code{\link[DescTools]{CramerV}}.
-two_sample_htest.factor <- function(value, group, ...) {
+two_sample_htest.factor <- function(value, group, two_sample_htest.factor = NULL,
+    ...) {
+
+    if (is.function(two_sample_htest.factor))
+        return(two_sample_htest.factor(value, group, ...))
+
+    if (is.function(atable_options("two_sample_htest.factor")))
+        return(atable_options("two_sample_htest.factor")(value, group, ...))
+
 
     test <- try(stats::chisq.test(group, value), silent = TRUE)
 
@@ -128,7 +148,16 @@ two_sample_htest.logical <- function(value, group, ...) {
 #' @export
 #' @describeIn two_sample_htest Calls \code{\link[stats]{ks.test}} on \code{value}.
 #'  Effect size is Cohen's d calculated by \code{\link[effsize]{cohen.d}}.
-two_sample_htest.numeric <- function(value, group, ...) {
+two_sample_htest.numeric <- function(value, group, two_sample_htest.numeric = NULL,
+    ...) {
+
+
+    if (is.function(two_sample_htest.numeric))
+        return(two_sample_htest.numeric(value, group, ...))
+
+    if (is.function(atable_options("two_sample_htest.numeric")))
+        return(atable_options("two_sample_htest.numeric")(value, group, ...))
+
 
     d <- data.frame(value = value, group = group)
 
@@ -185,7 +214,17 @@ two_sample_htest.numeric <- function(value, group, ...) {
 #' @export
 #' @describeIn two_sample_htest Calls \code{\link[stats]{wilcox.test}} on \code{value}.
 #'  Effect size is Cliff's delta calculated by \code{\link[effsize]{cliff.delta}}.
-two_sample_htest.ordered <- function(value, group, ...) {
+two_sample_htest.ordered <- function(value, group, two_sample_htest.ordered = NULL,
+    ...) {
+
+    if (is.function(two_sample_htest.ordered))
+        return(two_sample_htest.ordered(value, group, ...))
+
+    if (is.function(atable_options("two_sample_htest.ordered")))
+        return(atable_options("two_sample_htest.ordered")(value, group, ...))
+
+
+
     value <- as.numeric(value)  # wilcox.test demands class numeric, no ordered factor. Even when the test depends only on ranks
     data <- data.frame(value = value, group = group)
 
@@ -228,4 +267,3 @@ two_sample_htest.ordered <- function(value, group, ...) {
 
     return(out)
 }
-

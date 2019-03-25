@@ -10,9 +10,11 @@
 \usage{
 format_statistics(x, ...)
 
-\method{format_statistics}{statistics_numeric}(x, ...)
+\method{format_statistics}{statistics_numeric}(x,
+  format_statistics.statistics_numeric = NULL, ...)
 
-\method{format_statistics}{statistics_factor}(x, ...)
+\method{format_statistics}{statistics_factor}(x,
+  format_statistics.statistics_factor = NULL, ...)
 
 \method{format_statistics}{statistics_count_me}(x, ...)
 
@@ -22,6 +24,13 @@ format_statistics(x, ...)
 \item{x}{An object.}
 
 \item{...}{Passed from and to other methods.}
+
+\item{format_statistics.statistics_numeric}{Either \code{NULL} or a function. Default is \code{NULL}.
+If a function, then it will replace \code{atable:::format_statistics.statistics_numeric}.
+The function must mimic \code{\link{format_statistics}}: arguments are \code{x} and the ellipsis ... .
+Result is a non-empty data.frame with 2 columns called \code{'tag'} and \code{'value'}.}
+
+\item{format_statistics.statistics_factor}{Analog to argument format_statistics.statistics_numeric}
 }
 \value{
 A non-empty data.frame with 2 columns called \code{'tag'} and \code{'value'}.

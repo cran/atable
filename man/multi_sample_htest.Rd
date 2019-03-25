@@ -13,13 +13,16 @@ multi_sample_htest(value, group, ...)
 
 \method{multi_sample_htest}{logical}(value, group, ...)
 
-\method{multi_sample_htest}{factor}(value, group, ...)
+\method{multi_sample_htest}{factor}(value, group,
+  multi_sample_htest.factor = NULL, ...)
 
 \method{multi_sample_htest}{character}(value, group, ...)
 
-\method{multi_sample_htest}{ordered}(value, group, ...)
+\method{multi_sample_htest}{ordered}(value, group,
+  multi_sample_htest.ordered = NULL, ...)
 
-\method{multi_sample_htest}{numeric}(value, group, ...)
+\method{multi_sample_htest}{numeric}(value, group,
+  multi_sample_htest.numeric = NULL, ...)
 }
 \arguments{
 \item{value}{An atomic vector.}
@@ -27,6 +30,16 @@ multi_sample_htest(value, group, ...)
 \item{group}{A factor, same length as \code{value}.}
 
 \item{...}{Passed to methods.}
+
+\item{multi_sample_htest.factor}{Analog to argument two_sample_htest.numeric}
+
+\item{multi_sample_htest.ordered}{Analog to argument two_sample_htest.numeric}
+
+\item{multi_sample_htest.numeric}{Either \code{NULL} or a function. Default is \code{NULL}.
+If a function, then it will replace \code{atable:::multi_sample_htest.numeric}.
+The function must mimic \code{\link{multi_sample_htest.numeric}}: arguments are
+\code{value}, \code{group} and the ellipsis ... .
+Result is a named list with \code{length} > 0 with unique names.}
 }
 \value{
 A named list with length > 0.
