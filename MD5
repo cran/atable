@@ -1,4 +1,4 @@
-2ba43e81cc3132e7861e063ba882585f *DESCRIPTION
+8cfc5af0d0ea17485420c1b48d150e41 *DESCRIPTION
 0510a620d74843d5d152981fe77f2468 *NAMESPACE
 c6b717ed6f2944366cd26a4cc8da2e70 *R/Package_atable.R
 04acdfe1f17b670ab93949a808f27417 *R/add_observation_column.R
@@ -22,11 +22,11 @@ fea036368a90c54e1fbe22e8b2a783fe *R/statistics.R
 30a13ae1eb2f10991399e1f1d461673f *R/test_data.R
 2c3422ac41cb755c316cd80e675d26c9 *R/translate_to_LaTeX.R
 3da145afb81d4b538afdbbe1a1e59ccf *R/two_sample_htest.R
-072d16ef44d0d6627781a79226c07b6d *build/vignette.rds
+11df6038334ddd740afd74e21f28e259 *build/vignette.rds
 30b0dbeb5d9af507ca7c2577cba3bfc9 *data/standardized_test_data.rda
 e1dc817504624702a31bb9d13b86424a *data/test_data.rda
-d8258c847bcd9cdbee2d04df69cf412a *inst/doc/atable_usage.R
-5e88cd4ce7b13c673689f188f9b7a5c5 *inst/doc/atable_usage.pdf
+99dd3be6f1052095d71583082953267a *inst/doc/atable_usage.R
+f7af7757a6fd0e6511aaa9c6b5f1caad *inst/doc/atable_usage.pdf
 464f5e8ee1dc61c92f9d81023dc80ded *inst/doc/atable_usage.rnw
 60a80c288516101168c1a22d51d31361 *man/add_observation_column.Rd
 fe06b402aa83e2ed7e3e9ae9a420b372 *man/atable.Rd

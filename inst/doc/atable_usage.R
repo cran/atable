@@ -148,7 +148,7 @@ DD <- matrix(
 
     c('two_sample_test', 'chi^2 test', 'Wilcoxon Rank-Sum test', 'Kolmogorov-Smirnov Test'),
 
-    c('effect_size', "two levels: odds ratio, else Cramér's phi", "Cliff's Delta", "Cohen's d"),
+    c('effect_size', "two levels: odds ratio, else CramÃ©r's phi", "Cliff's Delta", "Cohen's d"),
 
     c('multi_sample_test', 'chi^2 test', 'Kruskal-Wallis test', 'Kruskal-Wallis test')
   ),
