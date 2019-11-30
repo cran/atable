@@ -1,4 +1,4 @@
-## ----require, echo=FALSE, results='hide', message=FALSE, warning=FALSE----------------------------
+## ----require, echo=FALSE, results='hide', message=FALSE, warning=FALSE--------
 
 require(knitr)
 require(Hmisc)
@@ -9,7 +9,7 @@ require(utils)
 require(atable)
 
 
-## ----global_chunk_options, echo = FALSE, results='hide'-------------------------------------------
+## ----global_chunk_options, echo = FALSE, results='hide'-----------------------
 
 opts_chunk$set(message = FALSE)
 opts_chunk$set(echo = FALSE)
@@ -17,7 +17,7 @@ opts_chunk$set(warning = FALSE)
 opts_chunk$set(results = "hide")
 
 
-## ----ToothGrowth atable, echo=TRUE, results='asis'------------------------------------------------
+## ----ToothGrowth atable, echo=TRUE, results='asis'----------------------------
 
 # apply atable
 the_table <- atable::atable(ToothGrowth,
@@ -36,7 +36,7 @@ Hmisc::latex(the_table,
              rowname = NULL)
 
 
-## ----mtcars atable, echo=TRUE, results='asis'-----------------------------------------------------
+## ----mtcars atable, echo=TRUE, results='asis'---------------------------------
 
 # all columns of mtcars are numeric, although some are
 # better represented as factors
@@ -64,7 +64,7 @@ Hmisc::latex(the_table,
              caption.lot = "mtcars analysed by atable",
              rowname = NULL)
 
-## ----Extract specific values from the table, echo=TRUE, results='markup'--------------------------
+## ----Extract specific values from the table, echo=TRUE, results='markup'------
 
 unformatted <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
                               mtcars,
@@ -75,7 +75,7 @@ unformatted <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
 unformatted$statistics_result$mpg[[2]]$mean
 unformatted$statistics_result$mpg[[2]]$sd
 
-## ----Localisation, echo=TRUE, results='asis'------------------------------------------------------
+## ----Localisation, echo=TRUE, results='asis'----------------------------------
 
 # Set german words for the table:
 atable::atable_options(labels_TRUE_FALSE = c("Ja", "Nein"),
@@ -113,7 +113,7 @@ Hmisc::latex(the_table,
 
 
 
-## ----Word, echo=TRUE------------------------------------------------------------------------------
+## ----Word, echo=TRUE----------------------------------------------------------
 
 for_Word <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs, mtcars,
                            format_to = "Word")
@@ -130,7 +130,7 @@ MyFTable <- flextable::align(MyFTable, align = "left", j = 1)
 # print(doc, target = "atable and Word.docx")
 
 
-## ----HTML, echo=TRUE------------------------------------------------------------------------------
+## ----HTML, echo=TRUE----------------------------------------------------------
 
 for_HTML <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
                            mtcars,
@@ -140,15 +140,15 @@ options(knitr.kable.NA = '')
 # knitr::kable(for_HTML, caption="HTML table with atable") # not run.
 
 
-## ----Console, echo=TRUE---------------------------------------------------------------------------
+## ----Console, echo=TRUE-------------------------------------------------------
 atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
                            mtcars,
                            format_to = "Console")
 
-## ----atable_options, echo=TRUE, eval=FALSE--------------------------------------------------------
+## ----atable_options, echo=TRUE, eval=FALSE------------------------------------
 #  atable_options(format_to = "Console")
 
-## ----Tabelle with stats and test, results='asis', echo=FALSE--------------------------------------
+## ----Tabelle with stats and test, results='asis', echo=FALSE------------------
 
 
 
@@ -196,7 +196,7 @@ Hmisc::latex(DD,
 
 
 
-## ----Replace two_sample_htest.numeric, results='markup', echo=TRUE--------------------------------
+## ----Replace two_sample_htest.numeric, results='markup', echo=TRUE------------
 # write a new function:
 new_two_sample_htest <- function(value, group, ...){
 
@@ -219,7 +219,7 @@ new_two_sample_htest <- function(value, group, ...){
 }
 
 
-## ----Modify statistics numeric, results='markup', echo=TRUE---------------------------------------
+## ----Modify statistics numeric, results='markup', echo=TRUE-------------------
 
 
 new_stats <- function(x, ...){
@@ -233,10 +233,10 @@ new_stats <- function(x, ...){
 }
 
 
-## ----replace via atable_options, results='markup', echo=TRUE--------------------------------------
+## ----replace via atable_options, results='markup', echo=TRUE------------------
 atable_options("statistics.numeric" = new_stats)
 
-## ----replace via atable, , results='markup', echo=TRUE--------------------------------------------
+## ----replace via atable, , results='markup', echo=TRUE------------------------
 the_table <-  atable::atable(atable::test_data,
                              target_cols = "Numeric",
                              group_col = "Group",
@@ -246,7 +246,7 @@ the_table <-  atable::atable(atable::test_data,
 
 
 
-## ----Print modify numeric, echo=TRUE, results='asis'----------------------------------------------
+## ----Print modify numeric, echo=TRUE, results='asis'--------------------------
 
 Hmisc::latex(the_table,
              file = "",
@@ -258,7 +258,7 @@ Hmisc::latex(the_table,
              rowname = NULL)
 
 
-## ----Methods for statistics, results='markup', echo=TRUE------------------------------------------
+## ----Methods for statistics, results='markup', echo=TRUE----------------------
 
 statistics.Date <- function(x, ...){
 
@@ -275,7 +275,7 @@ statistics.Date <- function(x, ...){
 }
 
 
-## ----Methods for format, results='markup', echo=TRUE----------------------------------------------
+## ----Methods for format, results='markup', echo=TRUE--------------------------
 format_statistics.statistics_Date <- function(x, ...){
 
   min_max <- paste0(x$Min, "; ", x$Max)
@@ -291,7 +291,7 @@ format_statistics.statistics_Date <- function(x, ...){
 }
 
 
-## ----Methods for Date print, echo=TRUE, results='asis'--------------------------------------------
+## ----Methods for Date print, echo=TRUE, results='asis'------------------------
 the_table <-  atable::atable(atable::test_data,
                              target_cols = "Date",
                              format_to = "Latex")
