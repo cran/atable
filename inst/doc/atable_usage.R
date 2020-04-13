@@ -148,6 +148,33 @@ atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
 ## ----atable_options, echo=TRUE, eval=FALSE------------------------------------
 #  atable_options(format_to = "Console")
 
+## ----mockup table, echo=TRUE, results='asis'----------------------------------
+
+# set the formating of numbers so that only 'x' is returned instead of digits.
+
+atable_options("format_p_values" = atable:::mockup_format_numbers)
+atable_options("format_numbers" = atable:::mockup_format_numbers)
+atable_options("format_percent" = atable:::mockup_format_numbers)
+
+# now apply atable to mtcars as above
+the_table <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs,
+                            mtcars,
+                            format_to = "Latex")
+
+# send to LaTeX
+Hmisc::latex(the_table,
+             file = "",
+             title = "",
+             label = "tab:mtcarsatablemockup",
+             caption = "mockup table of the mtcars analysis. Compare with
+               table \\ref{tab:mtcarsatable}.",
+             caption.lot = "mockup table of the mtcars analysis",
+             rowname = NULL)
+
+# back to normal:
+atable_options_reset()
+
+
 ## ----Tabelle with stats and test, results='asis', echo=FALSE------------------
 
 
