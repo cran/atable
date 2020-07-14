@@ -166,13 +166,34 @@ Hmisc::latex(the_table,
              file = "",
              title = "",
              label = "tab:mtcarsatablemockup",
-             caption = "mockup table of the mtcars analysis. Compare with
-               table \\ref{tab:mtcarsatable}.",
+             caption = "mockup table of the mtcars analysis, filled with xxx instead of numbers.
+                        Compare with table \\ref{tab:mtcarsatable}.",
              caption.lot = "mockup table of the mtcars analysis",
              rowname = NULL)
 
 # back to normal:
 atable_options_reset()
+
+
+## ----blocks, echo=TRUE, results='asis'----------------------------------------
+
+the_table <- atable::atable(datasets::mtcars,
+                     target_cols = c("cyl", "disp", "hp", "am", "gear", "qsec") ,
+                     blocks = list("Engine" = c("cyl", "disp", "hp"),
+                                   "Gearbox" = c("am", "gear")),
+                     format_to = "Latex")
+
+# send to LaTeX
+Hmisc::latex(
+  the_table,
+  file = "",
+  title = "",
+  label = "tab:mtcarsblocking",
+  caption = "Blocking shown with datasets::mtcars: Variables cyl, disp and mpg are
+in block Engine and variables am and gear in block gearbox. Variable qsec is not
+blocked and thus not indented.",
+caption.lot = "Blocking of the mtcars analysis",
+rowname = NULL)
 
 
 ## ----Tabelle with stats and test, results='asis', echo=FALSE------------------
