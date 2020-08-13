@@ -1,7 +1,7 @@
 Package: atable
 Type: Package
 Title: Create Tables for Reporting Clinical Trials
-Version: 0.1.7
+Version: 0.1.8
 Author: Armin Ströbel [aut, cre] (<https://orcid.org/0000-0002-6873-5332>),
   Alan Haynes [aut] (<https://orcid.org/0000-0003-1374-081X>)
 Maintainer: Armin Ströbel <arminstroebel@web.de>
@@ -23,6 +23,6 @@ Suggests: testthat, knitr, officer, flextable, survival, rmarkdown
 URL: https://github.com/arminstroebel/atable
 BugReports: https://github.com/arminstroebel/atable/issues
 NeedsCompilation: no
-Packaged: 2020-07-14 17:03:23 UTC; azguz
+Packaged: 2020-08-13 16:12:38 UTC; azguz
 Repository: CRAN
-Date/Publication: 2020-07-14 17:30:03 UTC
+Date/Publication: 2020-08-13 16:30:02 UTC
