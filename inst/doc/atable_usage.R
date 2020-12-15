@@ -3,8 +3,6 @@
 require(knitr)
 require(Hmisc)
 require(datasets)
-require(officer)
-require(flextable)
 require(utils)
 require(atable)
 
@@ -120,9 +118,9 @@ for_Word <- atable::atable(mpg + hp + gear + qsec ~ cyl | vs, mtcars,
 
 # print in Word with packages flextable and officer
 
-MyFTable <- flextable::regulartable(data = for_Word)
+# MyFTable <- flextable::regulartable(data = for_Word)
 # left aligned first column:
-MyFTable <- flextable::align(MyFTable, align = "left", j = 1)
+# MyFTable <- flextable::align(MyFTable, align = "left", j = 1)
 
 # save on disc. Not run here:
 # doc <- officer::read_docx()
@@ -352,4 +350,68 @@ Hmisc::latex(the_table,
              minimum, maximum and median for this class",
              caption.lot = "atable with added methods for class Date",
              rowname = NULL)
+
+## ----atable compact, echo=TRUE, results='asis'--------------------------------
+
+atable_options_reset()
+
+
+tab = atable_compact(atable::test_data,
+                     target_cols = c("Numeric", "Numeric2", "Split2", "Factor",
+                                     "Ordered"),
+                     group_col = "Group2",
+                     blocks = list("Primary Endpoint" = "Numeric",
+                                   "Secondary  Endpoint" = c("Numeric2", "Split2")),
+                     indent_character = "\\quad")
+
+tab = atable::translate_to_LaTeX(tab)
+
+Hmisc::latex(tab,
+             file = "",
+             title = "",
+             label = "tab:atable compact",
+             caption = Hmisc::latexTranslate("atable compact. The data.frame is
+             grouped by group_col and the summary statistcs of the target_cols
+             are calculated: mean, sd for numeric, counts and percentages for
+             factors. The target_cols are blocked: the first block 'Primary Endpoint'
+             contains the variable Numeric. The second block 'Secondary  Endpoint'
+             contains the variables 'Numeric2' and 'Split2'. The blocks are
+             intended. For variable Split2 only its first level 'b' is reported, as
+             the variable has only two levels and the name 'Split2' does not appear
+             in the table. The variables Factor and Ordered have more than two levels,
+             so all of them are reported and appropriately intended."),
+             caption.lot = "atable compact",
+             rowname = NULL)
+
+
+## ----atable longitudinal, echo=TRUE, results='asis'---------------------------
+
+x = atable::test_data
+
+# create timepoint of measurement
+set.seed(42)
+x = within(x, {time = sample(paste0("time_", 1:6), size=nrow(x), replace = TRUE)})
+
+tab = atable_longitudinal(x,
+       target_cols = "Split2",
+       group_col = "Group2",
+       split_cols = "time",
+       add_margins = TRUE)
+
+tab = atable::translate_to_LaTeX(tab)
+
+Hmisc::latex(tab,
+             file = "",
+             title = "",
+             label = "tab:atable longitudinal",
+             caption = Hmisc::latexTranslate("atable longitudinal. Table shows
+             statistics of variable Split2 measured at six time points in in three
+             groups and the p-values for a comparison of the groups. The name of
+             the variable 'Split2' does not show up in the table, so the user should
+             add it to the caption of the table. Also only statistics of the first
+             level of 'Split2' are shown, as 'Split2' has only two levels.
+             Format of the statistics is percent % (n/total)."),
+             caption.lot = "atable longitudinal",
+             rowname = NULL)
+
 
