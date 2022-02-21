@@ -147,7 +147,7 @@ test_that("two sample htest applies the expected tests", {
 
   expect_equal("Wilcoxon rank sum test with continuity correction", test$Ordered[[1]]$method)
 
-  expect_equal("Two-sample Kolmogorov-Smirnov test", test$Numeric[[1]]$method)
+  expect_true(grepl(pattern = "Kolmogorov-Smirnov", x=test$Numeric[[1]]$method))
 
 })
 

@@ -81,7 +81,7 @@ two_sample_htest.factor <- function(value, group, two_sample_htest.factor = NULL
 
     test <- try(stats::chisq.test(group, value), silent = TRUE)
 
-    out <- if (class(test) == "try-error") {
+    out <- if (inherits(test, "try-error")) {
         warning("Not enough values. Returning p-value=NaN..")
         test <- stats::chisq.test(x = matrix(10, nrow = 2, ncol = 2))  # some random data that allow a chisq.test without errors
         test <- plyr::llply(test, function(x) NA)
@@ -114,7 +114,7 @@ two_sample_htest.factor <- function(value, group, two_sample_htest.factor = NULL
             conf.level = 0.95), silent = TRUE)
 
 
-        effect_size <- if (class(effect_size_test) == "try-error") {
+        effect_size <- if (inherits(effect_size_test, "try-error")) {
             warning("Not enough values. Returning effect size NaN.")
             c(NaN, NaN, NaN)
         } else {
@@ -168,7 +168,7 @@ two_sample_htest.numeric <- function(value, group, two_sample_htest.numeric = NU
 
     test <- try(stats::ks.test(x, y, alternative = c("two.sided"), ...), silent = TRUE)
 
-    out <- if (class(test) == "try-error") {
+    out <- if (inherits(test, "try-error")) {
         warning("Not enough values. Returning p.value=NaN.")
         test <- stats::ks.test(c(1, 2), c(3, 4, 5), alternative = c("two.sided"))  # create valid data for ks.test
         test <- plyr::llply(test, function(x) NA)  # fill htest with NA
@@ -189,7 +189,7 @@ two_sample_htest.numeric <- function(value, group, two_sample_htest.numeric = NU
         silent = TRUE)
 
 
-    effect_size <- if (class(effect_size_test) == "try-error") {
+    effect_size <- if (inherits(effect_size_test, "try-error")) {
         warning("Not enough values. Returning effect size NaN.")
         list(estimate = NaN, conf.int = c(NaN, NaN))
     } else {
@@ -231,7 +231,7 @@ two_sample_htest.ordered <- function(value, group, two_sample_htest.ordered = NU
     test <- try(stats::wilcox.test(value ~ group, data, alternative = "two.sided",
         paired = FALSE), silent = TRUE)
 
-    out <- if (class(test) == "try-error") {
+    out <- if (inherits(test, "try-error")) {
         warning("Not enough values. Returning p.value NaN.")
         test <- stats::wilcox.test(x = c(1, 2), y = c(3, 4, 5), alternative = c("two.sided"),
             paired = FALSE)  # some test data that allow wilcox.test witout error
@@ -251,7 +251,7 @@ two_sample_htest.ordered <- function(value, group, two_sample_htest.ordered = NU
     effect_size_test <- try(effsize::cliff.delta(d = as.numeric(value), f = group),
         silent = TRUE)
 
-    effect_size <- if (class(effect_size_test) == "try-error") {
+    effect_size <- if (inherits(effect_size_test, "try-error")) {
         warning("Not enough values. Returning effect size NaN.")
         list(estimate = NaN, conf.int = c(NaN, NaN))
     } else {

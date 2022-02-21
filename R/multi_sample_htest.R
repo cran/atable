@@ -59,7 +59,7 @@ multi_sample_htest.factor <- function(value, group, multi_sample_htest.factor = 
 
     test <- try(stats::chisq.test(group, value), silent = TRUE)
 
-    out <- if (class(test) == "try-error") {
+    out <- if (inherits(test, "try-error")) {
         warning("Not enough values. Returning p-value=NaN.")
         test <- stats::chisq.test(x = matrix(10, nrow = 2, ncol = 2))  # some random data that allow a chisq.test without errors
         test <- plyr::llply(test, function(x) NA)
@@ -103,7 +103,7 @@ multi_sample_htest.ordered <- function(value, group, multi_sample_htest.ordered 
 
     test <- try(stats::kruskal.test(x = value, g = group, ...), silent = TRUE)
 
-    out <- if (class(test) == "try-error") {
+    out <- if (inherits(test, "try-error")) {
         warning("Not enough values. Returning NA.")
         test <- stats::kruskal.test(x = rep(c(1, 2), each = 4), g = factor(rep(letters[c(1,
             2)], each = 4)))
