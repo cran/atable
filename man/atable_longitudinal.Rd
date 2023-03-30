@@ -67,9 +67,9 @@ See examples.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: a longitudinal version of atable.
-}}
+\item \code{atable_longitudinal(data.frame)}: a longitudinal version of atable.
 
+}}
 \examples{
 # create data with a time-variable
 x = atable::test_data

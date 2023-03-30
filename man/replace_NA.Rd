@@ -55,20 +55,20 @@ length 1 or when replacement is \code{NA}.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: replaces \code{NA} with \code{replacement}.
+\item \code{replace_NA(character)}: replaces \code{NA} with \code{replacement}.
 
-\item \code{factor}: applies \code{replace_NA} to the levels of the factor. A
+\item \code{replace_NA(factor)}: applies \code{replace_NA} to the levels of the factor. A
 factor with length > 0 without levels will get the level \code{replacement}.
 
-\item \code{ordered}: as factor.
+\item \code{replace_NA(ordered)}: as factor.
 
-\item \code{data.frame}: applies \code{replace_NA} to all columns.
+\item \code{replace_NA(data.frame)}: applies \code{replace_NA} to all columns.
 
-\item \code{list}: applies \code{replace_NA} to all elements of the list.
+\item \code{replace_NA(list)}: applies \code{replace_NA} to all elements of the list.
 
-\item \code{default}: return \code{x} unchanged.
+\item \code{replace_NA(default)}: return \code{x} unchanged.
+
 }}
-
 \examples{
 Character <- c(NA,letters[1:3], NA)
 Factor <- factor(Character)

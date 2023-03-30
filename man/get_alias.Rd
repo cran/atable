@@ -37,16 +37,16 @@ This is a workhorse function, see \code{create_alias_mapping} for the high level
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{labelled}: Retrieve attributes \code{label} and \code{units}, if available.
+\item \code{get_alias(labelled)}: Retrieve attributes \code{label} and \code{units}, if available.
 Units are bracketed by '[]'. See also \code{\link[Hmisc]{label}} and \code{\link[Hmisc]{units}}.
 The user may alter this method via \code{\link{atable_options}}, see help there.
 
-\item \code{default}: Retrieve attribute \code{alias} via \code{\link[base]{attr}}.
+\item \code{get_alias(default)}: Retrieve attribute \code{alias} via \code{\link[base]{attr}}.
 This attribute may be an arbitrary character.
 If there is no attribute \code{alias}, then \code{get_alias.default} returns \code{NULL}.
 
-\item \code{data.frame}: Calls \code{get_alias} on every column.
+\item \code{get_alias(data.frame)}: Calls \code{get_alias} on every column.
 
-\item \code{list}: Calls \code{get_alias} on every element of the list.
+\item \code{get_alias(list)}: Calls \code{get_alias} on every element of the list.
+
 }}
-

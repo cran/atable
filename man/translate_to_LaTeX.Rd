@@ -50,17 +50,17 @@ Translate_to_LaTeX uses S3 object system. See seection methods.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: Applies \code{\link[Hmisc:latex]{latexTranslate}} to
+\item \code{translate_to_LaTeX(data.frame)}: Applies \code{\link[Hmisc:latex]{latexTranslate}} to
 \code{rownames(x)}, \code{colnames(x)} and all columns of \code{x}.
 
-\item \code{list}: Translates all elements of \code{x}.
+\item \code{translate_to_LaTeX(list)}: Translates all elements of \code{x}.
 
-\item \code{character}: As \code{\link[Hmisc:latex]{latexTranslate}}.
+\item \code{translate_to_LaTeX(character)}: As \code{\link[Hmisc:latex]{latexTranslate}}.
 
-\item \code{numeric}: Casts to character and then translates.
+\item \code{translate_to_LaTeX(numeric)}: Casts to character and then translates.
 
-\item \code{factor}: Translates the levels of the factor.
+\item \code{translate_to_LaTeX(factor)}: Translates the levels of the factor.
 
-\item \code{logical}: Casts to character and then translates.
+\item \code{translate_to_LaTeX(logical)}: Casts to character and then translates.
+
 }}
-

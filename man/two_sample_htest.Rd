@@ -74,18 +74,18 @@ and the CI of \code{cohen.d} contains 0 at the same time.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Casts \code{value} to factor and then calls method \code{two_sample_htest} again.
+\item \code{two_sample_htest(character)}: Casts \code{value} to factor and then calls method \code{two_sample_htest} again.
 
-\item \code{factor}: Calls \code{\link[stats]{chisq.test}} on \code{value}.
+\item \code{two_sample_htest(factor)}: Calls \code{\link[stats]{chisq.test}} on \code{value}.
 Effect size is the odds ratio calculated by \code{\link[stats]{fisher.test}} (if \code{value} has two levels),
 or Cramer's V by \code{\link[DescTools]{CramerV}}.
 
-\item \code{logical}: Casts \code{value} to factor and then calls \code{two_sample_htest} again.
+\item \code{two_sample_htest(logical)}: Casts \code{value} to factor and then calls \code{two_sample_htest} again.
 
-\item \code{numeric}: Calls \code{\link[stats]{ks.test}} on \code{value}.
+\item \code{two_sample_htest(numeric)}: Calls \code{\link[stats]{ks.test}} on \code{value}.
 Effect size is Cohen's d calculated by \code{\link[effsize]{cohen.d}}.
 
-\item \code{ordered}: Calls \code{\link[stats]{wilcox.test}} on \code{value}.
+\item \code{two_sample_htest(ordered)}: Calls \code{\link[stats]{wilcox.test}} on \code{value}.
 Effect size is Cliff's delta calculated by \code{\link[effsize]{cliff.delta}}.
-}}
 
+}}

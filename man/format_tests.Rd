@@ -46,14 +46,14 @@ Function \code{\link{check_format_tests}} checks if the output of \code{format_t
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{htest}: Defines how to format class \code{htest}.
+\item \code{format_tests(htest)}: Defines how to format class \code{htest}.
 Returns a data.frame with 1 rows. Column \code{p} contains the p-value of the \code{x}.
 
-\item \code{htest_with_effect_size}: Defines how to format class \code{htest_with_effect_size}.
+\item \code{format_tests(htest_with_effect_size)}: Defines how to format class \code{htest_with_effect_size}.
 Returns a data.frame with 1 rows. Column \code{p} contains the p-value of the \code{x}.
 Column \code{stat} contains the teststatistic.
 Column \code{Effect Size (CI)} contains a effect size and its 95\% Confidence interval.
 
-\item \code{default}: Tries to cast to data.frame with one row. Uses the names of the list as colnames.
-}}
+\item \code{format_tests(default)}: Tries to cast to data.frame with one row. Uses the names of the list as colnames.
 
+}}

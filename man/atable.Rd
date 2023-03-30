@@ -186,11 +186,11 @@ Applies descriptive statistics and hypothesis tests to data, and arranges the re
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: applies descriptive statistics and hypothesis tests, arranges the results for printing.
+\item \code{atable(data.frame)}: applies descriptive statistics and hypothesis tests, arranges the results for printing.
 
-\item \code{formula}: parses the formula and passes its parts to \code{atable}.
+\item \code{atable(formula)}: parses the formula and passes its parts to \code{atable}.
+
 }}
-
 \examples{
 # See vignette for more examples:
 # utils::vignette('atable_usage', package = 'atable')

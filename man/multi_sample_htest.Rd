@@ -62,14 +62,14 @@ to standardize the arguments of various hypothesis test functions.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{logical}: Casts to factor and then calls method \code{multi_sample_htest} again.
+\item \code{multi_sample_htest(logical)}: Casts to factor and then calls method \code{multi_sample_htest} again.
 
-\item \code{factor}: Calls \code{\link[stats]{chisq.test}}.
+\item \code{multi_sample_htest(factor)}: Calls \code{\link[stats]{chisq.test}}.
 
-\item \code{character}: Casts \code{value} to factor and then calls method \code{multi_sample_htest} again.
+\item \code{multi_sample_htest(character)}: Casts \code{value} to factor and then calls method \code{multi_sample_htest} again.
 
-\item \code{ordered}: Calls \code{\link[stats]{kruskal.test}}.
+\item \code{multi_sample_htest(ordered)}: Calls \code{\link[stats]{kruskal.test}}.
 
-\item \code{numeric}: Calls \code{multi_sample_htest}'s method on \code{ordered(value)}.
+\item \code{multi_sample_htest(numeric)}: Calls \code{multi_sample_htest}'s method on \code{ordered(value)}.
+
 }}
-

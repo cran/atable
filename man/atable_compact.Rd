@@ -66,9 +66,9 @@ Other features of atable (blocking, add_margins, alias) are available, see examp
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: a compact version of atable.
-}}
+\item \code{atable_compact(data.frame)}: a compact version of atable.
 
+}}
 \examples{
 # For Console:
 atable_compact(

@@ -63,20 +63,20 @@ Function \code{\link{check_statistics}} checks if the output of statistics is su
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{numeric}: Descriptive statistics are: length, number of missing values, mean and standard deviation.
+\item \code{statistics(numeric)}: Descriptive statistics are: length, number of missing values, mean and standard deviation.
 Class of the result is \code{'statistics_numeric'} and there is a method \code{format_statistics_to_Latex.statistics_numeric}.
 This function is meant for interval scaled variables.
 
-\item \code{factor}: Counts the numbers of occurrences of the levels of \code{x}
+\item \code{statistics(factor)}: Counts the numbers of occurrences of the levels of \code{x}
 with function \code{\link[base]{table}}.
 This function is meant for nominal and ordinal scaled variables.
 
-\item \code{logical}: Casts \code{x} to factor, then applies \code{statistics} again. The labels for \code{TRUE} and \code{FALSE} can also be modfied by setting \code{atable_options('labels_TRUE_FALSE')}.
+\item \code{statistics(logical)}: Casts \code{x} to factor, then applies \code{statistics} again. The labels for \code{TRUE} and \code{FALSE} can also be modfied by setting \code{atable_options('labels_TRUE_FALSE')}.
 
-\item \code{character}: Casts \code{x} to factor, then applies \code{statistics} again.
+\item \code{statistics(character)}: Casts \code{x} to factor, then applies \code{statistics} again.
 
-\item \code{ordered}: Casts \code{x} to factor, then applies \code{statistics} again.
+\item \code{statistics(ordered)}: Casts \code{x} to factor, then applies \code{statistics} again.
 
-\item \code{count_me}: Returns the \code{\link[base]{length}} of \code{x}. For class \code{'count_me'} see \code{\link{add_observation_column}}.
+\item \code{statistics(count_me)}: Returns the \code{\link[base]{length}} of \code{x}. For class \code{'count_me'} see \code{\link{add_observation_column}}.
+
 }}
-
