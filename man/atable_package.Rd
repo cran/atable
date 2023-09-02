@@ -3,6 +3,7 @@
 \docType{package}
 \name{atable_package}
 \alias{atable_package}
+\alias{atable-package}
 \title{atable: Create Tables for Reporting Clinical Trials}
 \description{
 The packages provides functions for descriptive statistics and hypothesis tests, and arranging the results for printing.

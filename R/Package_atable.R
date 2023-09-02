@@ -7,4 +7,5 @@
 #'
 #' @docType package
 #' @name atable_package
+#' @aliases atable-package
 NULL
