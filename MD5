@@ -1,4 +1,4 @@
-606038057d810866113ebe2353160975 *DESCRIPTION
+64d11b37593a33aad808fa86d1a77c8b *DESCRIPTION
 5b19bee2987d6d617618b59817595e5f *NAMESPACE
 8ce9e9132a497b823b8d12453c14c212 *R/Package_atable.R
 ef05978f75b051edf8cec61d84814fbc *R/add_name_to_statistics.R
@@ -33,14 +33,14 @@ fea036368a90c54e1fbe22e8b2a783fe *R/statistics.R
 30b0dbeb5d9af507ca7c2577cba3bfc9 *data/standardized_test_data.rda
 e1dc817504624702a31bb9d13b86424a *data/test_data.rda
 c1c73ac18707381ac9b553570ece17e5 *inst/doc/atable_usage.R
-200521f9970c96d34953d58dcaff56d5 *inst/doc/atable_usage.pdf
+a70516fa566dee42bf269d6f49357812 *inst/doc/atable_usage.pdf
 9074ce5d600a2301a24ba4cc85f7fb5c *inst/doc/atable_usage.rnw
 d021c4c4cf862949c3771905e4626728 *inst/doc/extending.R
 2f1fee670e57667460941c9e67df7b4c *inst/doc/extending.Rnw
-530df35554ca23a124fe6b3e214951ca *inst/doc/extending.pdf
-acfb1d9d6538aa62513309341d3775f5 *inst/doc/modifying.R
-7dfc8a0d12fdbc0439f16a06bb517689 *inst/doc/modifying.Rnw
-369a4cc67858eecf5e4bb25b40dd8934 *inst/doc/modifying.pdf
+6163237558a713419c215bf2bb4f812e *inst/doc/extending.pdf
+e0870b57fe069b25d3bf619e6df7b186 *inst/doc/modifying.R
+16e1de2bab9c36535a7f41f2e672d23b *inst/doc/modifying.Rnw
+84ee3c7ee513f87cf0d9181440d49616 *inst/doc/modifying.pdf
 4a6d830ab0bced4909d94305fee65f74 *man/add_name_to_statistics.Rd
 d9f8daad12a7ae614442608e4a5a3ae6 *man/add_name_to_tests.Rd
 08c58ac2bd9a158b463327e89c1b4b98 *man/add_observation_column.Rd
@@ -83,4 +83,4 @@ c4ebda0e20dd0e5e6e1a31ff20dea334 *tests/testthat/test_modify_atable.R
 9074ce5d600a2301a24ba4cc85f7fb5c *vignettes/atable_usage.rnw
 bbcd9c8ee0dda180fb7e3088636fb1a0 *vignettes/atableusage.bib
 2f1fee670e57667460941c9e67df7b4c *vignettes/extending.Rnw
-7dfc8a0d12fdbc0439f16a06bb517689 *vignettes/modifying.Rnw
+16e1de2bab9c36535a7f41f2e672d23b *vignettes/modifying.Rnw

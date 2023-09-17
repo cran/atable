@@ -158,10 +158,10 @@ atable_options("format_p_values")(0.0009)
 
 ## ----format_p_values print, results='asis'------------------------------------
 
-Hmisc::latex(atable(vs + cyl + hp + disp ~ am, mtcars),
-             file = "",
-             title = "",
-             rowname = NULL,
-             table.env = FALSE)
+# Hmisc::latex(atable(vs + cyl + hp + disp ~ am, mtcars),
+#              file = "",
+#              title = "",
+#              rowname = NULL,
+#              table.env = FALSE)
 
 
