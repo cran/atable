@@ -5,7 +5,6 @@
 #' The main function is \code{\link{atable}}. See documentation there.
 #'
 #'
-#' @docType package
-#' @name atable_package
-#' @aliases atable-package
+#' @keywords internal
+"_PACKAGE"
 NULL

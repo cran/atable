@@ -40,7 +40,7 @@ Actually \code{statistics.numeric} is passed to \code{\link{statistics}} and thu
 but for convenience it also documented here.
 
 Here is a list of the statistics and hypothesis tests that can be modified by \code{...} :
-\itemize{
+\describe{
   \item{\code{statistics.numeric}}{: Either \code{NULL} or a function. Default is \code{NULL}.
   If a function, then it will replace \code{atable:::statistics.numeric} when atable is called.
   The function must mimic \code{\link{statistics}}: see the help there.}
@@ -146,21 +146,22 @@ The \code{|} may also be omitted if no \code{split_cols} are given.}
 }
 \value{
 Results depend on \code{format_to}:
-\itemize{
-\item{\code{'Raw'}: }{A list with two elemtents called \code{'statistics_result'} and \code{'tests_result'}, that
-contain all results of the descriptve statistics and the hypothesis tests.
-This format useful, when extracting a specific result unformated
+\describe{
+\item{\code{'Raw'}: }{A list with two elements called \code{'statistics_result'} and \code{'tests_result'}, that
+contain all results of the descriptive statistics and the hypothesis tests.
+This format useful, when extracting a specific result unformulated
  (when \code{format_to} is not \code{'Raw'} all numbers are also returned, but as rounded
  characters for printing and squeezed into a data.frame).
-\itemize{
- \item{\code{'statistics_result'}: } { contains a data.frame with colnames \code{c(split_cols, group_col, target_cols}.
+\describe{
+ \item{\code{'statistics_result'}: }{ contains a data.frame with colnames \code{split_cols, group_col, target_cols}.
  \code{split_cols} and \code{group_col} retain their original values (now as factor).
  \code{target_cols} contain lists with the results of function \code{\link{statistics}}.
- As the result of function \code{statistics} is also a list, \code{target_cols} contain lists of lists.}
+ As the result of function \code{statistics} is also a list, \code{target_cols} contain lists of lists.  }
 
-   \item {\code{'tests_result'}: } {has the same structure as \code{'statistics_result'}, but contains the results
+   \item{\code{'tests_result'}: }{has the same structure as \code{'statistics_result'}, but contains the results
  of \code{\link{two_sample_htest}} and \code{\link{multi_sample_htest}}.
- Note that \code{tests_result} only exists if \code{split_cols} is not \code{NULL}.}}
+ Note that \code{tests_result} only exists if \code{split_cols} is not \code{NULL}.}
+ }
 }
 \item{\code{'Word'}: }{A data.frame.
 Column \code{atable_options('colname_for_group')} contains
